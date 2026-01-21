@@ -4,7 +4,8 @@
   "description": "Backend NestJS para generación de PDFs y subida a GoHighLevel",
   "main": "dist/main.js",
   "scripts": {
-    "start": "nest start",
+    "start": "node dist/main.js",
+    "start:prod": "node dist/main.js",
     "dev": "nest start --watch",
     "build": "nest build",
     "test": "jest"

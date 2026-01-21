@@ -1,0 +1,21 @@
+# Render.com configuration file
+# To test locally: npm run dev (development) or npm run build && npm run start:prod (production mode)
+services:
+  - type: web
+    name: pdf-ghl-service
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: "./render-build.sh"
+    startCommand: "npm run start:prod"
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PUPPETEER_SKIP_CHROMIUM_DOWNLOAD
+        value: true
+      - key: PUPPETEER_EXECUTABLE_PATH
+        value: /usr/bin/chromium
+      - key: GHL_API_KEY
+        sync: false
+      - key: GHL_LOCATION_ID
+        sync: false
