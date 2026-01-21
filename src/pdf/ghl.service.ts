@@ -60,6 +60,6 @@ export class GhlService {
         error.stack,
       );
       throw error;
-    }
+    } 
   }
 }

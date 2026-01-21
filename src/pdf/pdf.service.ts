@@ -21,16 +21,18 @@ export class PdfService {
 
     try {
       const isProduction = process.env.NODE_ENV === 'production';
+
       browser = await puppeteer.launch({
-  headless: true,
-  executablePath: isProduction ? undefined : 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
-  args: [
-    '--no-sandbox',
-    '--disable-setuid-sandbox',
-    '--disable-dev-shm-usage',
-    '--disable-gpu',
-  ],
-});
+        headless: true,
+        executablePath: isProduction ? undefined : 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-gpu',
+        ],
+      });
+
 
       this.logger.log('Browser de Puppeteer iniciado');
 
