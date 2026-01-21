@@ -7,7 +7,7 @@ apt-get update
 apt-get install -y chromium
 
 echo "Installing npm dependencies..."
-npm ci
+npm install --legacy-peer-deps
 
 echo "Building application..."
 npm run build
