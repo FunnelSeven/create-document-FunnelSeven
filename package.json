@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node dist/main.js",
     "start:prod": "node dist/main.js",
-    "dev": "nest start --watch",
-    "build": "nest build",
+    "dev": "npx nest start --watch",
+    "build": "npx nest build",
     "test": "jest"
   },
   "dependencies": {
