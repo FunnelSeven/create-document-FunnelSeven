@@ -6,7 +6,6 @@ import { PdfModule } from './pdf/pdf.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env',
     }),
     PdfModule,
   ],

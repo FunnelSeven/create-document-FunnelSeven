@@ -11,7 +11,7 @@ export class GhlService {
   private readonly locationId: string;
   private readonly apiUrl = 'https://services.leadconnectorhq.com/medias/upload-file';
 
-  constructor(private configService: ConfigService) {
+  constructor(private readonly configService: ConfigService) {
     this.apiKey = this.configService.get<string>('GHL_API_KEY')!;
     this.locationId = this.configService.get<string>('GHL_LOCATION_ID')!;
 
