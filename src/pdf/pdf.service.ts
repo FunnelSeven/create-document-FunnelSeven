@@ -24,7 +24,9 @@ export class PdfService {
 
       browser = await puppeteer.launch({
         headless: true,
-        executablePath: isProduction ? undefined : 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+        executablePath: isProduction
+          ? puppeteer.executablePath()
+          : 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
         args: [
           '--no-sandbox',
           '--disable-setuid-sandbox',
@@ -32,7 +34,6 @@ export class PdfService {
           '--disable-gpu',
         ],
       });
-
 
       this.logger.log('Browser de Puppeteer iniciado');
 
