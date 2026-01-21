@@ -14,20 +14,44 @@ export class PdfService {
     }
   }
 
+  private getChromePath(): string | undefined {
+    // Buscar Chrome en ubicaciones comunes de Render/Linux
+    const possiblePaths = [
+      '/opt/render/.cache/puppeteer/chrome/linux-131.0.6778.204/chrome-linux64/chrome',
+      '/opt/render/project/.cache/puppeteer/chrome/linux-131.0.6778.204/chrome-linux64/chrome',
+      process.env.PUPPETEER_EXECUTABLE_PATH,
+    ];
+
+    for (const chromePath of possiblePaths) {
+      if (chromePath && fs.existsSync(chromePath)) {
+        this.logger.log(`Chrome encontrado en: ${chromePath}`);
+        return chromePath;
+      }
+    }
+
+    return undefined;
+  }
+
   async generatePdf(html: string, fecha: string): Promise<string> {
     this.logger.log('Iniciando generación de PDF');
     let browser: puppeteer.Browser | undefined;
 
     try {
+      const executablePath = this.getChromePath();
+
+      this.logger.log(`Executable path: ${executablePath || 'default'}`);
+
       // 🚀 Puppeteer compatible con Render / Docker
       browser = await puppeteer.launch({
         headless: true,
+        executablePath: executablePath,
         args: [
           '--no-sandbox',
           '--disable-setuid-sandbox',
           '--disable-dev-shm-usage',
           '--disable-gpu',
           '--single-process',
+          '--no-zygote',
         ],
       });
 

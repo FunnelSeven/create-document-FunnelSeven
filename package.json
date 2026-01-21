@@ -8,6 +8,7 @@
     "start:prod": "node dist/main.js",
     "dev": "npx nest start --watch",
     "build": "tsc -p tsconfig.build.json",
+    "postinstall": "npx puppeteer browsers install chrome",
     "test": "jest"
   },
   "dependencies": {
