@@ -7,7 +7,6 @@ import * as path from 'path';
 export class PdfService {
   private readonly logger = new Logger(PdfService.name);
   private readonly tempDir = path.join(process.cwd(), 'temp');
-  
 
   constructor() {
     if (!fs.existsSync(this.tempDir)) {
@@ -17,28 +16,28 @@ export class PdfService {
 
   async generatePdf(html: string, fecha: string): Promise<string> {
     this.logger.log('Iniciando generación de PDF');
-    let browser;
+    let browser: puppeteer.Browser | undefined;
 
     try {
-      const isProduction = process.env.NODE_ENV === 'production';
-
+      // 🚀 Puppeteer compatible con Render / Docker
       browser = await puppeteer.launch({
         headless: true,
-        executablePath: isProduction
-          ? puppeteer.executablePath()
-          : 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
         args: [
           '--no-sandbox',
           '--disable-setuid-sandbox',
           '--disable-dev-shm-usage',
           '--disable-gpu',
+          '--single-process',
         ],
       });
 
       this.logger.log('Browser de Puppeteer iniciado');
 
       const page = await browser.newPage();
-      await page.setContent(html, { waitUntil: 'networkidle0' });
+
+      await page.setContent(html, {
+        waitUntil: 'networkidle0',
+      });
 
       const timestamp = Date.now();
       const fechaFormato = fecha.replace(/\//g, '');
@@ -50,19 +49,22 @@ export class PdfService {
       await page.pdf({
         path: filePath,
         format: 'A4',
+        printBackground: true,
         margin: {
           top: '20px',
           right: '20px',
           bottom: '20px',
           left: '20px',
         },
-        printBackground: true,
       });
 
       this.logger.log(`PDF generado exitosamente: ${filePath}`);
       return filePath;
-    } catch (error) {
-      this.logger.error(`Error al generar PDF: ${error.message}`, error.stack);
+    } catch (error: any) {
+      this.logger.error(
+        `Error al generar PDF: ${error.message}`,
+        error.stack,
+      );
       throw error;
     } finally {
       if (browser) {
@@ -78,8 +80,11 @@ export class PdfService {
         fs.unlinkSync(filePath);
         this.logger.log(`Archivo temporal eliminado: ${filePath}`);
       }
-    } catch (error) {
-      this.logger.warn(`No se pudo eliminar archivo: ${filePath}`, error.message);
+    } catch (error: any) {
+      this.logger.warn(
+        `No se pudo eliminar archivo: ${filePath}`,
+        error.message,
+      );
     }
   }
 }
