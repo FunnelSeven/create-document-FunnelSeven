@@ -7,6 +7,7 @@ import * as path from 'path';
 export class PdfService {
   private readonly logger = new Logger(PdfService.name);
   private readonly tempDir = path.join(process.cwd(), 'temp');
+  
 
   constructor() {
     if (!fs.existsSync(this.tempDir)) {
@@ -19,11 +20,17 @@ export class PdfService {
     let browser;
 
     try {
+      const isProduction = process.env.NODE_ENV === 'production';
       browser = await puppeteer.launch({
-        headless: true,
-        executablePath: process.env.CHROME_PATH || 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
-        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
-      });
+  headless: true,
+  executablePath: isProduction ? undefined : 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+  args: [
+    '--no-sandbox',
+    '--disable-setuid-sandbox',
+    '--disable-dev-shm-usage',
+    '--disable-gpu',
+  ],
+});
 
       this.logger.log('Browser de Puppeteer iniciado');
 
